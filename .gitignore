@@ -205,3 +205,101 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+docker-compose.override.yaml
+.docker/
+
+# Docker build artifacts
+*.tar
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+
+# Docker volumes and data
+docker-data/
+volumes/
+data/
+
+# Docker logs
+docker.log
+container.log
+
+# Docker environment files
+.env.docker
+.env.local
+.env.production
+.env.staging
+
+# Docker Compose
+docker-compose.override.*
+docker-compose.*.yml
+docker-compose.*.yaml
+
+# Docker Machine
+.docker/
+
+# Kubernetes (if using)
+*.kubeconfig
+kubeconfig
+.kube/
+
+# Terraform (if using for infrastructure)
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Ansible (if using for deployment)
+*.retry
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+azure-pipelines.yml
+Jenkinsfile
+
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# Node.js (if using for frontend or tooling)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Project specific
+Prompt.md

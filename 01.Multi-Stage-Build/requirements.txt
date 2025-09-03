@@ -1,0 +1,11 @@
+# Multi-stage build dependencies
+# Base stage dependencies
+pandas==2.1.4
+numpy==1.24.3
+
+# Training stage dependencies
+scikit-learn==1.3.2
+
+# Serving stage dependencies
+flask==3.0.0
+gunicorn==21.2.0
