@@ -5,7 +5,7 @@
 # - Model training service  
 # - Model serving service
 
-# version: '3.8'
+version: '3.8'
 
 services:
   # PostgreSQL database service
@@ -42,7 +42,7 @@ services:
     depends_on:
       database:
         condition: service_healthy
-    command: ["python", "prepare_data.py"]
+    command: ["python", "00-prepare_data.py"]
     networks:
       - ml-network
     restart: "no"
@@ -62,7 +62,7 @@ services:
         condition: service_healthy
       data-prep:
         condition: service_completed_successfully
-    command: ["python", "train_model.py"]
+    command: ["python", "10-train_model.py"]
     volumes:
       - model_data:/app
     networks:
@@ -89,7 +89,7 @@ services:
       - "5000:5000"
     volumes:
       - model_data:/app
-    command: ["python", "serve_model.py"]
+    command: ["python", "90-serve_model.py"]
     networks:
       - ml-network
     healthcheck:

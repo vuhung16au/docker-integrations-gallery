@@ -55,10 +55,43 @@ The project implements a complete ML pipeline with the following architecture:
 ├── requirements.txt       # Python dependencies
 └── README.md             # This file
 
-Root directory files (used by the pipeline):
-├── prepare_data.py       # Data generation and storage
-├── train_model.py        # Model training script
-└── serve_model.py        # Model serving API
+Pipeline files (numbered for sequence clarity):
+├── 00-prepare_data.py    # Data generation and storage (Step 1)
+├── 10-train_model.py     # Model training script (Step 2)
+└── 90-serve_model.py     # Model serving API (Step 3)
+```
+
+## 🔢 **Pipeline File Naming Convention**
+
+The pipeline files use a **numbered prefix system** to clearly indicate execution order and allow for easy insertion of new pipeline steps:
+
+### **Current Pipeline Sequence**
+- **`00-prepare_data.py`** - Data preparation and storage
+- **`10-train_model.py`** - Model training and evaluation  
+- **`90-serve_model.py`** - Model deployment and serving
+
+### **Benefits of Numbered Naming**
+1. **Clear Execution Order**: Numbers immediately show the pipeline sequence
+2. **Easy Insertion**: Add new steps like `05-validate_data.py` or `15-feature_engineering.py`
+3. **Logical Grouping**: 
+   - `00-19`: Data preparation and validation
+   - `20-39`: Feature engineering and preprocessing
+   - `40-59`: Model training and evaluation
+   - `60-79`: Model validation and testing
+   - `80-99`: Deployment and serving
+4. **Maintainability**: New team members can quickly understand the pipeline flow
+5. **Scalability**: Easy to add intermediate steps without renumbering everything
+
+### **Future Pipeline Expansion Examples**
+```
+00-prepare_data.py          # Data generation
+05-validate_data.py         # Data quality checks
+10-feature_engineering.py   # Feature creation
+15-train_model.py           # Model training
+20-evaluate_model.py        # Model evaluation
+25-optimize_model.py        # Hyperparameter tuning
+90-serve_model.py           # Model serving
+95-monitor_model.py         # Model monitoring
 ```
 
 ## 🚀 Quick Start
@@ -73,9 +106,9 @@ docker-compose up --build
 This command will:
 - Build the application image
 - Start PostgreSQL database
-- Run data preparation service
-- Run model training service
-- Start model serving service
+- Run data preparation service (`00-prepare_data.py`)
+- Run model training service (`10-train_model.py`)
+- Start model serving service (`90-serve_model.py`)
 - Wait for each service to complete before starting the next
 
 To run the docker compose file
@@ -123,16 +156,16 @@ curl -X POST http://localhost:5000/predict \
 ### **Service Dependencies and Execution Order**
 
 1. **Database Service** starts first and waits for health check
-2. **Data Preparation** starts after database is healthy
-3. **Model Training** starts after data preparation completes
-4. **Model Serving** starts after model training completes
+2. **Data Preparation** (`00-prepare_data.py`) starts after database is healthy
+3. **Model Training** (`10-train_model.py`) starts after data preparation completes
+4. **Model Serving** (`90-serve_model.py`) starts after model training completes
 
 ### **Data Flow**
 
-1. **Data Generation**: `prepare_data.py` creates synthetic data (y = 2x + 1 + noise)
+1. **Data Generation**: `00-prepare_data.py` creates synthetic data (y = 2x + 1 + noise)
 2. **Data Storage**: Data is stored in PostgreSQL `linear_data` table
-3. **Model Training**: `train_model.py` reads data, trains model, saves to volume
-4. **Model Serving**: `serve_model.py` loads model and serves predictions via API
+3. **Model Training**: `10-train_model.py` reads data, trains model, saves to volume
+4. **Model Serving**: `90-serve_model.py` loads model and serves predictions via API
 
 ### **Volume Management**
 

@@ -17,10 +17,10 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application files
-COPY prepare_data.py .
-COPY train_model.py .
-COPY serve_model.py .
+# Copy application files in pipeline sequence order
+COPY 00-prepare_data.py .
+COPY 10-train_model.py .
+COPY 90-serve_model.py .
 
 # Create a non-root user
 RUN useradd --create-home --shell /bin/bash app \
@@ -31,4 +31,4 @@ USER app
 EXPOSE 5000
 
 # Default command (can be overridden in docker-compose)
-CMD ["python", "serve_model.py"]
+CMD ["python", "90-serve_model.py"]
