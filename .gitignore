@@ -303,3 +303,34 @@ yarn-error.log*
 
 # Project specific
 Prompt.md
+
+# Multi-Container Data Pipeline
+model.pkl
+*.pkl
+.env
+.env.local
+.env.production
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Model artifacts
+models/
+artifacts/
+checkpoints/
+
+# Data files
+data/
+datasets/
+raw_data/
+processed_data/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+temp/
+tmp/

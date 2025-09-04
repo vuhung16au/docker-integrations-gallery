@@ -1,0 +1,17 @@
+# Multi-Container Data Pipeline Dependencies
+
+# Core data science libraries
+pandas==2.1.4
+numpy==1.24.3
+scikit-learn==1.3.2
+
+# Database connectivity
+psycopg2-binary==2.9.7
+sqlalchemy==2.0.23
+
+# Web framework
+flask==3.0.0
+gunicorn==21.2.0
+
+# Additional utilities
+python-dotenv==1.0.0
