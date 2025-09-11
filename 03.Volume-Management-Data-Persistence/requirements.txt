@@ -1,0 +1,24 @@
+# Volume Management & Data Persistence Project Dependencies
+
+# Web framework for API endpoints
+flask>=2.3.0
+flask-cors>=4.0.0
+
+# Data processing
+pandas>=1.5.0
+numpy>=1.24.0
+
+# File system monitoring
+watchdog>=3.0.0
+
+# Logging and monitoring
+python-json-logger>=2.0.0
+
+# Date and time utilities
+python-dateutil>=2.8.0
+
+# HTTP requests for health checks
+requests>=2.31.0
+
+# Environment variable management
+python-dotenv>=1.0.0

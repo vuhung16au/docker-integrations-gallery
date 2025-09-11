@@ -1,0 +1,107 @@
+# Volume Management & Data Persistence with Docker Compose
+# This setup demonstrates different types of volumes and data persistence patterns
+
+version: '3.8'
+
+services:
+  # Main data processing service
+  data-processor:
+    build: .
+    container_name: volume-data-processor
+    environment:
+      - PROCESSING_MODE=continuous
+      - LOG_LEVEL=INFO
+      - INPUT_DIR=/app/data/input
+      - OUTPUT_DIR=/app/data/output
+      - BACKUP_DIR=/app/data/backup
+    volumes:
+      # Named volumes for persistent data
+      - input_data:/app/data/input
+      - output_data:/app/data/output
+      - backup_data:/app/data/backup
+      - logs:/app/logs
+      # Bind mount for local data access
+      - ./data/local:/app/data/local:ro
+    ports:
+      - "8080:8080"
+    networks:
+      - volume-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # File monitoring service
+  file-watcher:
+    build: .
+    container_name: volume-file-watcher
+    environment:
+      - WATCH_DIR=/app/data/input
+      - LOG_LEVEL=INFO
+    volumes:
+      - input_data:/app/data/input
+      - logs:/app/logs
+    command: ["python", "file_watcher.py"]
+    networks:
+      - volume-network
+    restart: unless-stopped
+    depends_on:
+      - data-processor
+
+  # Backup service
+  backup-service:
+    build: .
+    container_name: volume-backup-service
+    environment:
+      - BACKUP_INTERVAL=300
+      - SOURCE_DIR=/app/data/output
+      - BACKUP_DIR=/app/data/backup
+      - LOG_LEVEL=INFO
+    volumes:
+      - output_data:/app/data/output
+      - backup_data:/app/data/backup
+      - logs:/app/logs
+    command: ["python", "backup_service.py"]
+    networks:
+      - volume-network
+    restart: unless-stopped
+    depends_on:
+      - data-processor
+
+  # Log aggregation service
+  log-aggregator:
+    build: .
+    container_name: volume-log-aggregator
+    environment:
+      - LOG_DIR=/app/logs
+      - AGGREGATION_INTERVAL=60
+    volumes:
+      - logs:/app/logs
+      # tmpfs mount for temporary processing
+      - type: tmpfs
+        target: /tmp
+        tmpfs:
+          size: 100M
+    command: ["python", "log_aggregator.py"]
+    networks:
+      - volume-network
+    restart: unless-stopped
+
+# Named volumes for data persistence
+volumes:
+  input_data:
+    driver: local
+  output_data:
+    driver: local
+  backup_data:
+    driver: local
+  logs:
+    driver: local
+
+# Custom network for service communication
+networks:
+  volume-network:
+    driver: bridge
