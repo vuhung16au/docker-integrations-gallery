@@ -237,7 +237,8 @@ The gallery is organized as a progressive learning journey, with each project bu
 - **Complete projects in order**: Each builds upon previous concepts
 - **Read all README files**: Comprehensive documentation for each project
 - **Experiment with modifications**: Try changing configurations and see the results
-- **Test thoroughly**: Use provided test scripts and create your own
+- **Test thoroughly**: Use the enhanced test script to validate individual projects or run the full suite
+- **Use individual testing**: Test specific projects during development with `./scripts/test-docker.sh [project-name]`
 - **Document your learnings**: Keep notes on concepts and best practices
 
 ## 🧪 Testing & Validation
@@ -259,14 +260,41 @@ This automated testing script provides:
 
 #### **Usage**
 
-Run the test script from the project root:
+The test script now supports flexible testing options:
 
+**Test All Projects** (original behavior):
 ```bash
 cd docker-integrations-gallery
+./scripts/test-docker.sh --all
+```
+
+**Test Individual Projects**:
+```bash
+# Test specific projects
+./scripts/test-docker.sh 00.HelloDocker
+./scripts/test-docker.sh 01.Multi-Stage-Build
+./scripts/test-docker.sh 02.Multi-Container-Data-Pipelines
+./scripts/test-docker.sh 03.Volume-Management-Data-Persistence
+./scripts/test-docker.sh 04.Security-Run-with-Non-Root-Users
+./scripts/test-docker.sh 05.Heart-Disease-Predictions
+./scripts/test-docker.sh 06.Jupyter
+```
+
+**Get Help**:
+```bash
+./scripts/test-docker.sh --help
+# or simply
 ./scripts/test-docker.sh
 ```
 
-Note: The script takes a while to run, so get a cup of coffee.
+**Enhanced Features**:
+- **Individual Project Testing**: Test specific projects without running the entire suite
+- **Clear Project Identification**: Each test shows the project name and test type (Dockerfile or Docker Compose)
+- **Flexible Usage**: Run all tests or focus on specific projects
+- **Better Error Handling**: Clear error messages for invalid project names
+- **Help System**: Built-in help documentation
+
+Note: Running all tests takes a while, so get a cup of coffee. Individual project tests are much faster!
 
 #### **What Gets Tested**
 
@@ -280,19 +308,48 @@ The script automatically tests:
 6. **05.Heart-Disease-Predictions** - docker-compose.yaml (Flask app with volumes)
 7. **06.Jupyter** - Dockerfile (Jupyter Lab server)
 
-#### **Test Output Example**
+#### **Test Output Examples**
 
+**Individual Project Test**:
+```bash
+$ ./scripts/test-docker.sh 00.HelloDocker
+[INFO] ==========================================
+[INFO] Testing: 00.HelloDocker (dockerfile)
+[INFO] ==========================================
+[INFO] Testing Dockerfile in 00.HelloDocker...
+[INFO] Project: hello-docker | Test Type: Dockerfile
+[INFO] Building image for hello-docker...
+[INFO] Running container for hello-docker...
+[SUCCESS] hello-docker container completed successfully
+[SUCCESS] hello-docker test completed successfully
+[SUCCESS] Project: hello-docker | Test Type: Dockerfile - COMPLETED
+[SUCCESS] Test passed for 00.HelloDocker
 ```
+
+**Docker Compose Project Test**:
+```bash
+$ ./scripts/test-docker.sh 02.Multi-Container-Data-Pipelines
+[INFO] ==========================================
+[INFO] Testing: 02.Multi-Container-Data-Pipelines (compose)
+[INFO] ==========================================
+[INFO] Testing docker-compose in 02.Multi-Container-Data-Pipelines...
+[INFO] Project: multi-container-pipeline | Test Type: Docker Compose
+[INFO] Building and starting services for multi-container-pipeline...
+[SUCCESS] multi-container-pipeline services are running
+[SUCCESS] multi-container-pipeline test completed successfully
+[SUCCESS] Project: multi-container-pipeline | Test Type: Docker Compose - COMPLETED
+[SUCCESS] Test passed for 02.Multi-Container-Data-Pipelines
+```
+
+**All Projects Test** (summary):
+```bash
+$ ./scripts/test-docker.sh --all
 [INFO] Starting Docker Integration Gallery Tests...
 [INFO] Docker binary: /usr/local/bin/docker
 [INFO] ==========================================
 [INFO] Testing: 00.HelloDocker (dockerfile)
 [INFO] ==========================================
-[INFO] Testing Dockerfile in 00.HelloDocker...
-[INFO] Building image for hello-docker...
-[INFO] Running container for hello-docker...
-[SUCCESS] hello-docker container completed successfully
-[SUCCESS] hello-docker test completed successfully
+[INFO] Project: hello-docker | Test Type: Dockerfile
 ...
 [INFO] ==========================================
 [INFO] TEST SUMMARY
@@ -301,6 +358,29 @@ The script automatically tests:
 [SUCCESS] Passed: 7
 [SUCCESS] Failed: 0
 [SUCCESS] All tests passed! 🎉
+```
+
+#### **Testing Workflow Recommendations**
+
+**For Learning & Development**:
+1. **Start with individual tests** when working on specific projects
+2. **Use `--all` for validation** when you want to ensure everything works
+3. **Test frequently** during development to catch issues early
+4. **Use help system** (`./scripts/test-docker.sh --help`) to see available options
+
+**Common Testing Scenarios**:
+```bash
+# Quick validation of a single project
+./scripts/test-docker.sh 00.HelloDocker
+
+# Test a complex multi-container setup
+./scripts/test-docker.sh 02.Multi-Container-Data-Pipelines
+
+# Validate all projects after making changes
+./scripts/test-docker.sh --all
+
+# Get help when unsure
+./scripts/test-docker.sh --help
 ```
 
 #### **Prerequisites for Testing**
